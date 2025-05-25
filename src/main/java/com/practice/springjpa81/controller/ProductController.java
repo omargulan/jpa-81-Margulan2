@@ -2,6 +2,7 @@ package com.practice.springjpa81.controller;
 
 import com.practice.springjpa81.dto.ProductDto;
 import com.practice.springjpa81.dto.ProductMapper;
+import com.practice.springjpa81.dto.ProductShortDto;
 import com.practice.springjpa81.model.Product;
 import com.practice.springjpa81.repository.ProductRepository;
 import com.practice.springjpa81.specifications.ProductSpecifications;
@@ -23,7 +24,7 @@ public class ProductController {
     private final ProductMapper productMapper;
 
     @GetMapping
-    public List<ProductDto> findAll(
+    public List<ProductShortDto> findAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
             @RequestParam(defaultValue = "id") String field,
@@ -35,7 +36,7 @@ public class ProductController {
         List<Product> products = productRepository.findByCategory_Id(categoryId, pageable).getContent();
 
         return products.stream()
-                .map(product ->  productMapper.toDto(product))
+                .map(product ->  productMapper.toNotFullDto(product))
                 .toList();
     }
 
