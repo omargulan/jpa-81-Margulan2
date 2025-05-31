@@ -1,15 +1,19 @@
 package com.practice.springjpa81.controller;
 
+import com.practice.springjpa81.dto.CategoryCreateDto;
 import com.practice.springjpa81.dto.CategoryFullDto;
 import com.practice.springjpa81.dto.CategoryMapper;
 import com.practice.springjpa81.dto.CategoryShortDto;
 import com.practice.springjpa81.model.Category;
+import com.practice.springjpa81.model.Option;
 import com.practice.springjpa81.repository.CategoryRepository;
+import com.practice.springjpa81.repository.OptionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -18,6 +22,7 @@ import java.util.List;
 public class CategoryController {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final OptionRepository optionRepository;
 
     @GetMapping
     public List<CategoryShortDto> findAll() {
@@ -34,9 +39,27 @@ public class CategoryController {
         return categoryMapper.toFullDto(category);
     }
 
+//    @PostMapping
+//    public Category create(@RequestBody Category category) {
+//        return categoryRepository.save(category);  // insert into categories (name) values (?)
+//    }
+
     @PostMapping
-    public Category create(@RequestBody Category category) {
-        return categoryRepository.save(category);  // insert into categories (name) values (?)
+    public CategoryFullDto create(@RequestBody CategoryCreateDto dto){
+        Category category = new Category();
+        category.setName(dto.getName());
+
+        List<Option> list = new ArrayList<>();
+        for (String optionName : dto.getOptions()){
+            Option option = new Option();
+            option.setName(optionName);
+            option.setCategory(category);
+            category.getOptions().add(option);
+            list.add(option);
+        }
+        categoryRepository.save(category);
+        optionRepository.saveAll(list);
+        return categoryMapper.toFullDto(category);
     }
     
     @PutMapping("/{id}")
