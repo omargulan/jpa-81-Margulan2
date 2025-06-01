@@ -22,6 +22,6 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Option> options = new ArrayList<>();
 }
