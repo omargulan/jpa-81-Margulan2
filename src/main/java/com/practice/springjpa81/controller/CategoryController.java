@@ -1,6 +1,9 @@
 package com.practice.springjpa81.controller;
 
-import com.practice.springjpa81.dto.*;
+import com.practice.springjpa81.dto.CategoryCreateDto;
+import com.practice.springjpa81.dto.CategoryFullDto;
+import com.practice.springjpa81.dto.CategoryMapper;
+import com.practice.springjpa81.dto.CategoryShortDto;
 import com.practice.springjpa81.model.Category;
 import com.practice.springjpa81.model.Option;
 import com.practice.springjpa81.repository.CategoryRepository;
@@ -59,51 +62,14 @@ public class CategoryController {
         return categoryMapper.toFullDto(category);
     }
     
-//    @PutMapping("/{id}")
-//    public Category update(long id, @RequestBody Category category) {
-//        Category existingCategory = categoryRepository.findById(id)
-//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//
-//        existingCategory.setName(category.getName());
-//
-//        return categoryRepository.save(existingCategory); // update categories set name = ? where id = ?
-//    }
-
-
-    @PatchMapping("/{id}")
-    public CategoryFullDto update(@PathVariable long id, @RequestBody CategoryUpdateDto dto) {
+    @PutMapping("/{id}")
+    public Category update(long id, @RequestBody Category category) {
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        if (dto.getName()!=null){
-            existingCategory.setName(dto.getName());
-        }
-        //existingCategory.setName(dto.getName());
-        for (OptionDto optionDto : dto.getOptions()){
-            if (optionDto.getId()!=null){
-                boolean isPresent = false;
-                for (Option option : existingCategory.getOptions()){
-                    if (option.getId().equals(optionDto.getId())){
-                        option.setName(optionDto.getName());
-                        isPresent = true;
-                        break;
-                    }
-                }
-                if (!isPresent){
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-                }
-            } else {
-                Option option = new Option();
-                option.setName(optionDto.getName());
-                option.setCategory(existingCategory);
-                existingCategory.getOptions().add(option);
-            }
-
-        }
-        //Category SaveCategory = categoryRepository.save(existingCategory);
-        categoryRepository.save(existingCategory);
-        return categoryMapper.toFullDto(existingCategory); // update categories set name = ? where id = ?
-        //return categoryMapper.toFullDto(existingCategory); // update categories set name = ? where id = ?
-
+        
+        existingCategory.setName(category.getName());
+        
+        return categoryRepository.save(existingCategory); // update categories set name = ? where id = ?
     }
 
     @DeleteMapping("/{id}")

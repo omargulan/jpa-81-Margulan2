@@ -9,7 +9,7 @@ import java.util.List;
 public class CategoryUpdateDto {
     //@Schema(title = "Название категорий", example = "процессоры")
     private String name;
-    private List<OptionDto> options = new ArrayList<>();
+    private List<String> options = new ArrayList<>();
 
 
 }
