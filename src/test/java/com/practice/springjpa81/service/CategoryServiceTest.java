@@ -4,6 +4,8 @@ import com.practice.springjpa81.model.Category;
 import com.practice.springjpa81.repository.CategoryRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -11,10 +13,16 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CategoryServiceTest {
+    @Mock
+    CategoryRepository categoryRepository;
+
+    @InjectMocks
+    CategoryService categoryService;
+
     @Test
-    void create_shouldThrowException_whencategoryNameisTaken(){
-        CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
-        CategoryService categoryService = new CategoryService(categoryRepository);
+    void create_shouldThrowException_whenCategoryNameIsTaken(){
+        //CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
+        //CategoryService categoryService = new CategoryService(categoryRepository);
 
         Category existingCategory = new Category();
         existingCategory.setId(1L);
@@ -31,10 +39,10 @@ public class CategoryServiceTest {
     }
 
     @Test
-    void create_shouldThrowException_whencategoryNameisNotTaken(){
+    void create_shouldThrowException_whenCategoryNameIsNotTaken(){
         //CategoryService categoryService = new CategoryService();
-        CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
-        CategoryService categoryService = new CategoryService(categoryRepository);
+        //CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
+        //CategoryService categoryService = new CategoryService(categoryRepository);
 
         Mockito.when(categoryRepository.findByName("Кухонная гарнитура"))
                 .thenReturn(Optional.empty());
@@ -48,14 +56,10 @@ public class CategoryServiceTest {
     @Test
     void create_shouldThrowException_whenCategoryNameIsNull(){
         CategoryRepository categoryRepository = Mockito.mock(CategoryRepository.class);
-        CategoryService categoryService = new CategoryService(categoryRepository);
-
-
-
+        //CategoryService categoryService = new CategoryService(categoryRepository);
 
         Category newCategory = new Category();
         newCategory.setName(null);
-
 
         RuntimeException ex = Assertions.assertThrows(RuntimeException.class, () -> categoryService.create(newCategory));
         assertEquals("Название категорий не может быть пустым", ex.getMessage());
