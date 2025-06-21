@@ -24,6 +24,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     List<Category> findByNameContainingIgnoreCase(String name); // р
 
+    List<Category> id(Long id);
+
     // Создайте класс Film
     // - заполните полями.
     // Создайте интерфейс FilmRepository.
