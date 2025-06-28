@@ -8,6 +8,7 @@ import com.practice.springjpa81.model.Category;
 import com.practice.springjpa81.model.Option;
 import com.practice.springjpa81.repository.CategoryRepository;
 import com.practice.springjpa81.repository.OptionRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +46,7 @@ public class CategoryController {
 //    }
 
     @PostMapping
-    public CategoryFullDto create(@RequestBody CategoryCreateDto dto){
+    public CategoryFullDto create(@Valid @RequestBody CategoryCreateDto dto){
         Category category = new Category();
         category.setName(dto.getName());
 
